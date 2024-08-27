@@ -1,15 +1,15 @@
 package com.bank.account;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.bank.exception.InsufficientFundsException;
 
-public class BankAccount {
-    private String accountNumber;
-	private double balance;
-    private List<Transaction> transactions;
+import java.util.ArrayList;
+
+public abstract class BankAccount {
+    protected String accountNumber;
+    protected double balance;
+    protected List<Transaction> transactions;
 
     public BankAccount(String accountNumber) {
         this.accountNumber = accountNumber;
@@ -17,9 +17,11 @@ public class BankAccount {
         this.transactions = new ArrayList<>();
     }
 
+    public abstract String getAccountType();
+
     public void deposit(double amount) {
         balance += amount;
-        transactions.add(new Transaction(new Date(), amount, "Deposit"));
+        transactions.add(new Transaction("Deposit", amount, balance));
     }
 
     public void withdraw(double amount) throws InsufficientFundsException {
@@ -27,22 +29,18 @@ public class BankAccount {
             throw new InsufficientFundsException("Insufficient funds for withdrawal");
         }
         balance -= amount;
-        transactions.add(new Transaction(new Date(), -amount, "Withdrawal"));
+        transactions.add(new Transaction("Withdrawal", amount, balance));
     }
 
     public double getBalance() {
         return balance;
     }
 
-    public AccountStatement getStatement() {
-        return new AccountStatement(transactions);
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
-    
-    public String getAccountNumber() {
-		return accountNumber;
-	}
 
-	public void setAccountNumber(String accountNumber) {
-		this.accountNumber = accountNumber;
-	}
+    public String getAccountNumber() {
+        return accountNumber;
+    }
 }

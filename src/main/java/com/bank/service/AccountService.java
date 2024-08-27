@@ -2,6 +2,7 @@ package com.bank.service;
 
 import com.bank.account.BankAccount;
 import com.bank.exception.AccountNotFoundException;
+import com.bank.factory.AccountFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,8 +23,8 @@ public class AccountService {
         return instance;
     }
 
-    public void createAccount(String accountNumber) {
-        accounts.put(accountNumber, new BankAccount(accountNumber));
+    public void createAccount(String type, String accountNumber) {
+        accounts.put(accountNumber, AccountFactory.createAccount(type, accountNumber));
     }
 
     public BankAccount getAccount(String accountNumber) throws AccountNotFoundException {
