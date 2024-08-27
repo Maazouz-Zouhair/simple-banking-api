@@ -1,6 +1,7 @@
 package com.bank;
 
 import com.bank.account.BankAccount;
+import com.bank.account.ConsoleStatementPrinter;
 import com.bank.account.AccountStatement;
 import com.bank.account.StatementPrinter;
 import com.bank.exception.InsufficientFundsException;
@@ -17,7 +18,7 @@ public class Main {
         }
 
         AccountStatement statement = account.getStatement();
-        StatementPrinter printer = new StatementPrinter();
+        StatementPrinter printer = new StatementPrinter(new ConsoleStatementPrinter());
         printer.print(statement);
     }
 }
