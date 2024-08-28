@@ -2,25 +2,36 @@ package com.bank.service;
 
 import com.bank.account.BankAccount;
 import com.bank.exception.InsufficientFundsException;
+import com.bank.exception.InvalidTransactionAmountException;
 
+/**
+ * TransactionService handles deposit and withdrawal operations on bank
+ * accounts.
+ */
 public class TransactionService {
 
-    private static TransactionService instance;
+	public void deposit(BankAccount account, double amount) throws InvalidTransactionAmountException {
+		if (amount <= 0) {
+			throw new InvalidTransactionAmountException("Amount must be positive.");
+		}
+		account.deposit(amount);
+		logTransaction(account, amount, "Deposit");
+	}
 
-    private TransactionService() {}
+	public void withdraw(BankAccount account, double amount)
+			throws InvalidTransactionAmountException, InsufficientFundsException {
+		if (amount <= 0) {
+			throw new InvalidTransactionAmountException("Amount must be positive.");
+		}
+		if (account.getBalance() < amount) {
+			throw new InsufficientFundsException("Insufficient funds for withdrawal");
+		}
+		account.withdraw(amount);
+		logTransaction(account, amount, "Withdrawal");
+	}
 
-    public static synchronized TransactionService getInstance() {
-        if (instance == null) {
-            instance = new TransactionService();
-        }
-        return instance;
-    }
-
-    public void deposit(BankAccount account, double amount) {
-        account.deposit(amount);
-    }
-
-    public void withdraw(BankAccount account, double amount) throws InsufficientFundsException {
-        account.withdraw(amount);
-    }
+	private void logTransaction(BankAccount account, double amount, String transactionType) {
+		System.out.println(
+				transactionType + " of amount " + amount + " completed on account " + account.getAccountNumber());
+	}
 }
